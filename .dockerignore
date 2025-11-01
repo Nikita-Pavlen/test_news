@@ -1,0 +1,9 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+.github
+
+# IDE and editor files
+.vscode
+.idea
