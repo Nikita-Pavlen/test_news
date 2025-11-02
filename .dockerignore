@@ -7,3 +7,11 @@
 # IDE and editor files
 .vscode
 .idea
+
+# Ignore backup/temp files
+*~
+*.swp
+*.bak
+
+node_modules
+vendor

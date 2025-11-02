@@ -45,11 +45,7 @@ COPY docker/php/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 COPY . /var/www/html
 
+RUN chown -R www-data:www-data /var/www/html
+
 # Set working directory
 WORKDIR /var/www/html
-
-# Install PHP dependencies
-RUN composer install
-
-# Install Node.js dependencies for React application
-RUN npm install
