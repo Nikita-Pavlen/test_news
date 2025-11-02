@@ -1,18 +1,17 @@
-<script>
-export default {
-    name: 'App',
-}
+<script setup>
+import Header from "./Header.vue";
 </script>
 
 <template>
-    <h1>Hello App!</h1>
-    <p><strong>Current route path:</strong> {{ $route.fullPath }}</p>
-    <nav>
-        <RouterLink to="/">Go to Home</RouterLink>
-    </nav>
-    <main>
-        <RouterView />
-    </main>
+    <div class="min-h-screen bg-gray-50">
+        <!-- Header -->
+        <Header />
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <RouterView />
+        </main>
+    </div>
 </template>
 
 <style scoped>
