@@ -24,7 +24,7 @@ const register = function () {
             password_confirmation: passwordConfirmation.value,
             role_id: role.value
         }).then(r => {
-            router.push({name: 'index'})
+            router.push({name: 'news.index'})
         })
     })
 }
