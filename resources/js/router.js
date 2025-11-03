@@ -4,9 +4,21 @@ import {useAuth} from "./auth.js";
 const routes = [
     {
         path: '/',
-        name: 'index',
-        component: () => import('./components/Index.vue'),
+        name: 'news.index',
+        component: () => import('./components/news/Index.vue'),
         meta: {requiresAuth: true}
+    },
+    {
+        path: '/news/:id',
+        name: 'news.show',
+        component: () => import('./components/news/Show.vue'),
+        meta: {requiresAuth: true}
+    },
+    {
+        path: '/news/create',
+        name: 'news.create',
+        component: () => import('./components/news/Create.vue'),
+        meta: {requiresAuth: true, roleAuthor: true},
     },
     {
         path: '/login',
@@ -28,17 +40,21 @@ export const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    const {checkAuth} = useAuth()
-    const authenticated = await checkAuth()
+    const {checkAuth, user, isAuthenticated} = useAuth()
+    await checkAuth()
 
-    if (to.meta.requiresAuth && !authenticated) {
+    if (to.meta.requiresAuth && !isAuthenticated.value) {
         next({name: 'login'})
         return
     }
 
+    if (to.meta.requiresGuest && isAuthenticated.value) {
+        next({name: 'news.index'})
+        return
+    }
 
-    if (to.meta.requiresGuest && authenticated) {
-        next({name: 'index'})
+    if (to.meta.roleAuthor && user.value.role_id !== 1 && user.value.role_id !== 3) {
+        next({name: 'news.index'})
         return
     }
 

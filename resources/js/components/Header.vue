@@ -22,15 +22,42 @@ const logout = function () {
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex-shrink-0">
-                    <h1 class="text-2xl font-bold text-gray-900">BlogApp</h1>
+                    <RouterLink :to="{name: 'news.index'}" class="text-2xl font-bold text-gray-900">
+                        BlogApp
+                    </RouterLink>
                 </div>
 
                 <!-- Menu -->
                 <nav class="flex items-center space-x-6">
-                    <a href="#" v-if="isAuthenticated" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">News</a>
-                    <a href="#" v-if="isAuthenticated" @click="logout" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Logout</a>
-                    <a href="#" v-if="!isAuthenticated" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Login</a>
-                    <a href="#" v-if="!isAuthenticated" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Register</a>
+                    <RouterLink
+                        v-if="isAuthenticated"
+                        :to="{name: 'news.index'}"
+                        class="text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                    >
+                        News
+                    </RouterLink>
+                    <button
+                        v-if="isAuthenticated"
+                        @click="logout"
+                        class="text-gray-700 hover:text-gray-900 font-medium transition-colors cursor-pointer"
+                        type="button"
+                    >
+                        Logout
+                    </button>
+                    <RouterLink
+                        v-if="!isAuthenticated"
+                        :to="{name: 'login'}"
+                        class="text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                    >
+                        Login
+                    </RouterLink>
+                    <RouterLink
+                        v-if="!isAuthenticated"
+                        :to="{name: 'registration'}"
+                        class="text-gray-700 hover:text-gray-900 font-medium transition-colors"
+                    >
+                        Register
+                    </RouterLink>
                 </nav>
             </div>
         </div>

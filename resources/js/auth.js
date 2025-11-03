@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import {computed, ref} from 'vue'
 
 const user = ref(null)
 const isAuthenticated = computed(() => !!user.value)
