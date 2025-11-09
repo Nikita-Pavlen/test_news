@@ -2,6 +2,7 @@
 import {ref, onMounted} from 'vue'
 import {formatDate} from "../../date.js";
 import {useAuth} from '../../auth.js'
+import LikeButton from './LikeButton.vue'
 
 const news = ref([])
 const loading = ref(true)
@@ -108,6 +109,13 @@ onMounted(() => {
                                     </p>
                                 </div>
                             </div>
+                            <LikeButton
+                                :news-id="item.id"
+                                :is-liked="item.is_liked"
+                                :likes-count="item.likes_count ?? 0"
+                                @update:isLiked="value => item.is_liked = value"
+                                @update:likesCount="value => item.likes_count = value"
+                            />
                         </div>
 
                         <!-- Date -->
