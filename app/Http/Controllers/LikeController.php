@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AuthorNotification;
 use App\Models\News;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,10 +13,27 @@ class LikeController extends Controller
     {
         $user = $request->user();
 
-        $news->likes()->firstOrCreate(
+        $like = $news->likes()->firstOrCreate(
             ['user_id' => $user->id],
             ['created_at' => now()]
         );
+
+        if ($like->wasRecentlyCreated) {
+            $news->loadMissing('user');
+
+            $author = $news->user;
+
+            if ($author && $author->isNot($user)) {
+                event(new AuthorNotification(
+                    authorId: $author->id,
+                    message: "{$user->name} liked \"{$news->title}\"",
+                    meta: [
+                        'news_id' => $news->id,
+                        'liker_id' => $user->id,
+                    ],
+                ));
+            }
+        }
 
         return $this->buildResponse($news, true);
     }

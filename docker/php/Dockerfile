@@ -49,3 +49,9 @@ RUN chown -R www-data:www-data /var/www/html
 
 # Set working directory
 WORKDIR /var/www/html
+
+RUN composer install
+RUN npm install
+RUN php artisan migrate:fresh --seed
+RUN npm run build
+RUN php artisan reverb:start
