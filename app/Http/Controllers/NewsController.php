@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return News::with('user')->get();
+        return $this->baseNewsQuery($request)
+            ->latest()
+            ->get();
     }
 
     /**
@@ -47,15 +48,18 @@ class NewsController extends Controller
         $news->user_id = $user->id;
         $news->save();
 
-        return response()->json($news->load('user'), 201);
+        $resource = $this->baseNewsQuery($request)->findOrFail($news->id);
+
+        return response()->json($resource, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
-        return News::with('user')->find($id);
+        return $this->baseNewsQuery($request)
+            ->findOrFail($id);
     }
 
     /**
@@ -80,5 +84,22 @@ class NewsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Prepare the base query for fetching news with like metadata.
+     */
+    private function baseNewsQuery(Request $request)
+    {
+        $user = $request->user();
+
+        return News::query()
+            ->with('user')
+            ->withCount('likes')
+            ->withExists([
+                'likes as is_liked' => function ($query) use ($user) {
+                    $query->where('user_id', $user?->id);
+                },
+            ]);
     }
 }

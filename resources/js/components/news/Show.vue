@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { formatDate } from '../../date.js'
+import LikeButton from './LikeButton.vue'
 
 const route = useRoute()
 
@@ -59,8 +60,8 @@ onMounted(() => {
         <article v-else class="bg-white rounded-lg shadow-sm p-6">
             <header class="mb-6">
                 <h1 class="text-3xl font-bold text-gray-900 mb-3">{{ item.title }}</h1>
-                <div class="flex flex-wrap items-center text-sm text-gray-500">
-                    <div class="flex items-center mr-4">
+                <div class="flex flex-wrap items-center justify-between gap-4 text-sm text-gray-500">
+                    <div class="flex items-center">
                         <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center mr-2">
                             <span class="text-blue-600 font-semibold text-sm">{{ item.user?.name?.charAt(0)?.toUpperCase() }}</span>
                         </div>
@@ -72,6 +73,14 @@ onMounted(() => {
                         </svg>
                         <time :datetime="item.created_at">{{ formatDate(item.created_at) }}</time>
                     </div>
+                    <LikeButton
+                        :news-id="item.id"
+                        :is-liked="item.is_liked"
+                        :likes-count="item.likes_count ?? 0"
+                        size="lg"
+                        @update:isLiked="value => item.is_liked = value"
+                        @update:likesCount="value => item.likes_count = value"
+                    />
                 </div>
             </header>
 
